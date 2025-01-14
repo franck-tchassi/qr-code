@@ -6,18 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { LayoutGrid } from "lucide-react"; // Import de l'icône LayoutGrid
+import { LayoutGrid } from "lucide-react"; // Icône LayoutGrid
 
 const QrCodeGenerator = () => {
-  const [url, setUrl] = useState("");
-  const [color, setColor] = useState("#000000");
-  const [bgColor, setBgColor] = useState("#ffffff");
+  const [url, setUrl] = useState<string>("");
+  const [color, setColor] = useState<string>("#000000");
+  const [bgColor, setBgColor] = useState<string>("#ffffff");
   const [logo, setLogo] = useState<string | null>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [qrType, setQrType] = useState("link");
+  const [qrType, setQrType] = useState<"link" | "email">("link");
 
-  // Fonction pour valider les codes hexadécimaux ou les noms de couleurs
-  const isValidColor = (value: string) => {
+  // Fonction pour valider les couleurs hexadécimales ou les noms de couleurs
+  const isValidColor = (value: string): boolean => {
     const s = new Option().style;
     s.color = value;
     return s.color !== "";
@@ -31,7 +31,7 @@ const QrCodeGenerator = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
+    <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-4xl p-8 rounded-lg shadow-xl bg-white bg-opacity-80">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-gray-900">
@@ -45,7 +45,7 @@ const QrCodeGenerator = () => {
             <div className="flex-1 space-y-8">
               <Tabs
                 defaultValue="link"
-                onValueChange={(val) => setQrType(val)}
+                onValueChange={(val) => setQrType(val as "link" | "email")}
                 className="space-y-6"
               >
                 <TabsList className="flex justify-center gap-4 bg-white rounded-lg shadow-md p-2">
@@ -166,7 +166,7 @@ const QrCodeGenerator = () => {
                     id="logo"
                     type="file"
                     accept="image/*"
-                    onChange={(e: any) => {
+                    onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
                         setLogoFile(e.target.files[0]);
                         const reader = new FileReader();
@@ -181,10 +181,9 @@ const QrCodeGenerator = () => {
             </div>
 
             {/* QR Code Display Section */}
-            <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8"> {/* Augmenté le padding ici */}
-              <div className="relative p-11 bg-white rounded-lg shadow-md mb-6"> {/* Augmenté le padding ici aussi */}
-                {/* Icône LayoutGrid avant le QR code */}
-                <LayoutGrid size={32} className="absolute top-2 right-2 text-gray-500 opacity-50" /> {/* Ajusté la position de l'icône */}
+            <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8">
+              <div className="relative p-11 bg-white rounded-lg shadow-md mb-6">
+                <LayoutGrid size={32} className="absolute top-2 right-2 text-gray-500 opacity-50" />
                 <QRCodeSVG
                   id="qr-code-svg"
                   value={url}
@@ -218,5 +217,6 @@ const QrCodeGenerator = () => {
 };
 
 export default QrCodeGenerator;
+
 
 
