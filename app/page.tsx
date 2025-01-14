@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import QrCodeGenerator from './QrCodeGenerator';
-import Navbar from './Navbar'
+
 
 export default function Home() {
   
