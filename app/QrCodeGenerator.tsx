@@ -204,7 +204,45 @@ const QrCodeGenerator = () => {
               </div>
               <button
                 className="px-6 py-2 text-lg font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition-all duration-200"
-                onClick={() => console.log("Download feature pending...")}
+                onClick={() => {
+                  const svgElement = document.getElementById("qr-code-svg");
+                  if (!svgElement) {
+                    console.error("QR Code SVG element not found.");
+                    return;
+                  }
+              
+                  const svgData = new XMLSerializer().serializeToString(svgElement);
+                  const canvas = document.createElement("canvas");
+                  const ctx = canvas.getContext("2d");
+              
+                  if (!ctx) {
+                    console.error("Failed to get 2D context for canvas.");
+                    return;
+                  }
+              
+                  const img = new Image();
+              
+                  img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    const pngFile = canvas.toDataURL("image/png");
+              
+                    // Création d'un lien de téléchargement
+                    const downloadLink = document.createElement("a");
+                    downloadLink.href = pngFile;
+                    downloadLink.download = "qr-code.png";
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                  };
+              
+                  img.onerror = () => {
+                    console.error("Failed to load SVG as image.");
+                  };
+              
+                  img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+                }}
               >
                 Download QR Code
               </button>
